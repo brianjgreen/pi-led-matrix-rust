@@ -16,7 +16,7 @@ This is a LED matrix library that simplifies driving a LED matrix of any size cr
 git clone git@github.com:natelewis/pi-led-matrix.git
 cd pi-led-matrix
 make bootstrap
-make run rgb_test
+make run effect=rgb_test
 # Red, blue, green... in a 600x300 window
 # ctl-c to stop script
 ```

@@ -87,7 +87,7 @@ try:
     import board
     import neopixel
     from adafruit_pixel_framebuf import VERTICAL, PixelFramebuffer
-except ImportError:
+except (ImportError, NotImplementedError):
     # virtual env
     VIRTUAL_ENV = True
     # mock the board module for the virtual env
@@ -164,6 +164,12 @@ class VirtualMatrix:
 
     def circle(self, center, radius, rgb_color, width):
         cv2.circle(self.frame, center, radius, self.bgr_color_swap(rgb_color), width)
+
+    def polylines(self, points, rgb_color, width):
+        cv2.polylines(self.frame, points, True, self.bgr_color_swap(rgb_color), width)
+
+    def polyfill(self, points, rgb_color):
+        cv2.fillPoly(self.frame, points, self.bgr_color_swap(rgb_color))
 
     def text(self, message, start, font_size, rgb_color, font="dosis.ttf"):
         led_text.text(
@@ -256,6 +262,18 @@ class LiveMatrix:
             led_color.swap_colors(rgb_color, color_order),
             width,
         )
+
+    def polylines(self, points, rgb_color, width):
+        cv2.polylines(
+            self.frame,
+            points,
+            True,
+            led_color.swap_colors(rgb_color, color_order),
+            width,
+        )
+
+    def polyfill(self, points, rgb_color):
+        cv2.fillPoly(self.frame, points, led_color.swap_colors(rgb_color, color_order))
 
     def delay(self, ms):
         led_time.delay(ms)
